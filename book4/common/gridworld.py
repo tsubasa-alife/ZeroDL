@@ -1,4 +1,5 @@
 import numpy as np
+import gridworld_render as render_helper
 
 
 class GridWorld:
@@ -40,3 +41,46 @@ class GridWorld:
 		for h in range(self.height):
 			for w in range(self.width):
 				yield (h, w)
+
+	def next_state(self, state, action):
+		action_move_map = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+		move = action_move_map[action]
+		next_state = (state[0] + move[0], state[1] + move[1])
+		ny, nx = next_state
+
+		# マップの外に出た場合は移動しない
+		if ny < 0 or ny >= self.height or nx < 0 or nx >= self.width:
+			next_state = state
+		# 壁にぶつかった場合は移動しない
+		elif next_state == self.wall_state:
+			next_state = state
+
+		return next_state
+
+	def reward(self, state, action, next_state):
+		return self.reward_map[next_state]
+
+	# エージェントの状態を初期化する
+	def reset(self):
+		self.agent_state = self.start_state
+		return self.agent_state
+
+	# エージェントが行動し時間が1つ進む
+	def step(self, action):
+		state = self.agent_state
+		next_state = self.next_state(state, action)
+		reward = self.reward(state, action, next_state)
+		done = (next_state == self.goal_state)
+
+		self.agent_state = next_state
+		return next_state, reward, done
+
+	# マップと状態価値関数を描画する
+	def render_v(self, v=None, policy=None, print_value=False):
+		renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
+		renderer.render_v(v, policy, print_value)
+
+	# マップと行動価値関数を描画する
+	def render_q(self, q, print_value=True):
+		renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
+		renderer.render_q(q, print_value)
