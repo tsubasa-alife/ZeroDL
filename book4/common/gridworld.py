@@ -76,11 +76,11 @@ class GridWorld:
 		return next_state, reward, done
 
 	# マップと状態価値関数を描画する
-	def render_v(self, v=None, policy=None, print_value=False):
+	def render_v(self, v=None, policy=None, print_value=True):
 		renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
 		renderer.render_v(v, policy, print_value)
 
 	# マップと行動価値関数を描画する
-	def render_q(self, q, print_value=True):
+	def render_q(self, q=None, print_value=True):
 		renderer = render_helper.Renderer(self.reward_map, self.goal_state, self.wall_state)
 		renderer.render_q(q, print_value)
