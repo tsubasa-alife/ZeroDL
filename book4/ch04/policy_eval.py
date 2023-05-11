@@ -41,8 +41,8 @@ env = GridWorld()
 gamma = 0.9
 # 0: 上, 1: 下, 2: 左, 3: 右
 # これらの行動確率の分布を変更するとV値が変化する
-pi = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 1.25})
+pi = defaultdict(lambda: {0: 0.25, 1: 0.25, 2: 0.25, 3: 0.25})
 V = defaultdict(lambda: 0)
 
 V = policy_eval(pi, V, env, gamma)
-env.render_v(V)
+env.render_v(V, pi)
