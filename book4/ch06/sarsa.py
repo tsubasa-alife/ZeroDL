@@ -3,10 +3,11 @@ sys.path.append("../common")
 import numpy as np
 from collections import defaultdict, deque
 from utils import greedy_probs
+from gridworld import GridWorld
 
 
 class SarsaAgent:
-    def __int__(self):
+    def __init__(self):
         self.gamma = 0.9
         self.alpha = 0.8
         self.epsilon = 0.1
@@ -34,9 +35,31 @@ class SarsaAgent:
         state, action, reward, done = self.memory[0]
         next_state, next_action, _, _ = self.memory[1]
 
-        next_q = 0 if done else self.Q[next_state][next_action]
+        next_q = 0 if done else self.Q[next_state, next_action]
 
         target = reward + self.gamma * next_q
         self.Q[state, action] += self.alpha * (target - self.Q[state, action])
 
-        self.pi[state] = greedy_probs(self.Q, state, )
+        self.pi[state] = greedy_probs(self.Q, state, self.epsilon)
+
+
+env = GridWorld()
+agent = SarsaAgent()
+
+episodes = 10000
+for episode in range(episodes):
+    state = env.reset()
+    agent.reset()
+
+    while True:
+        action = agent.get_action(state)
+        next_state, reward, done = env.step(action)
+        agent.update(state, action, reward, done)
+
+        if done:
+            agent.update(next_state, None, None, None)
+            break
+
+        state = next_state
+
+env.render_q(agent.Q)
