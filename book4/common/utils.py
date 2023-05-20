@@ -28,3 +28,11 @@ def plot_total_reward(reward_history):
 	plt.plot(range(len(reward_history)), reward_history)
 	plt.show()
 
+
+def one_hot(state):
+	HEIGHT, WIDTH = 3, 4
+	vec = np.zeros(HEIGHT * WIDTH, dtype=np.float32)
+	y, x = state
+	idx = WIDTH * y + x
+	vec[idx] = 1.0
+	return vec[np.newaxis, :]
