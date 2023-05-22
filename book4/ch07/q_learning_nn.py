@@ -2,7 +2,6 @@ import sys
 sys.path.append("../common")
 import numpy as np
 import matplotlib.pyplot as plt
-from collections import defaultdict, deque
 from utils import greedy_probs, one_hot
 from gridworld import GridWorld
 from dezero import Model, optimizers
